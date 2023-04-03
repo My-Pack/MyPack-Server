@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
     id("org.springframework.boot") version "3.0.5"
@@ -55,25 +54,21 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 
-//tasks.bootBuildImage {
-//    val imageName = "${System.getenv("DOCKER_USERNAME")}/mypack-api"
-//    val publish = true
-//
-//    docker {
-//        publishRegistry {
-//            val username = System.getenv("DOCKER_USERNAME")
-//            val password = System.getenv("DOCKER_PASSWORD")
-//        }
-//    }
-//}
+buildscript {
+    dependencies {
+        classpath("com.google.cloud.tools:jib-spring-boot-extension-gradle:0.1.0")
+    }
+}
 
-tasks.named<BootBuildImage>("bootBuildImage") {
-    imageName.set("${System.getenv("DOCKER_USERNAME")}/mypack-api")
-    publish.set(true)
-    docker {
-        publishRegistry {
-            username.set(System.getenv("DOCKER_USERNAME"))
-            password.set(System.getenv("DOCKER_PASSWORD"))
+jib {
+    to {
+        image = "${System.getenv("DOCKERHUB_USERNAME")}/mypack-server"
+        tags = setOf("latest")
+    }
+
+    pluginExtensions {
+        pluginExtension {
+            implementation = "com.google.cloud.tools.jib.gradle.extension.springboot.JibSpringBootExtension"
         }
     }
 }
