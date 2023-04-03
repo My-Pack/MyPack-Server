@@ -50,7 +50,7 @@ jobs:
       - name: Build Image with Gradle and Push to DockerHub
         run: ./gradlew jib
         env:
-          DOCKER_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
 
       # ssh로 접속해 재배포
       - name: Deploy
