@@ -95,6 +95,11 @@ spring:
     livereload:
       enabled: off
 
+logging:
+  slack:
+    webhook-url: ${SLACK_WEBHOOK_URL}
+  config: classpath:logback-slack.xml
+
 server:
   error:
     include-stacktrace: never
