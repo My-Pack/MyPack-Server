@@ -8,7 +8,9 @@ permissions:
   checks: write
 
 jobs:
-  CI-CD:
+  job-1:
+    name: CI(Build)
+
     runs-on: ubuntu-latest
 
     steps:
@@ -52,6 +54,13 @@ jobs:
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
 
+  job-2:
+    name: CD(Deploy)
+    needs: job-1
+
+    runs-on: ubuntu-latest
+
+    steps:
       # ssh로 접속해 재배포
       - name: Deploy
         uses: appleboy/ssh-action@master
