@@ -19,33 +19,33 @@ class SecurityConfig(
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
-        // TODO: invoke를 이용해서 DSL 구성
-//        http.invoke {
-//        }
 
         return http
-            .cors().configurationSource(configurationSource())
-            .and()
-            .csrf().disable()
-            .formLogin().disable()
-            .httpBasic().disable()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authorizeHttpRequests()
-            .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-//            .requestMatchers("/swagger-ui/**").permitAll()
-//            .requestMatchers("/api-docs/**").permitAll()
-//            .anyRequest().authenticated()
-            // TODO: api 구성 후 request 권한 검증 추가하기
-            .anyRequest().permitAll()
-            .and()
+            .cors {
+                it.configurationSource(configurationSource())
+            }
+            .csrf {
+                it.disable()
+            }
+            .formLogin {
+                it.disable()
+            }
+            .httpBasic {
+                it.disable()
+            }
+            .sessionManagement {
+                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            }
+            .authorizeHttpRequests {
+                it.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                    .anyRequest().permitAll()
+            }
             // TODO: Add filter, authenticationEntryPoint, accessDeniedHandler
-//            .addFilterBefore(?, UsernamePasswordAuthenticationFilter::class.java)
-            .exceptionHandling()
-//            .authenticationEntryPoint(authenticationEntryPoint())
-//            .accessDeniedHandler(accessDeniedHandler())
-            .and()
+//            .addFilterBefore()
+//            .exceptionHandling {
+//                it.authenticationEntryPoint()
+//                    .accessDeniedHandler()
+//            }
             .build()
     }
 
