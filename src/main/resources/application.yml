@@ -1,3 +1,9 @@
+auth:
+  google:
+    client_id: ${GOOGLE_OAUTH_CLIENT_ID}
+  jwt:
+    secret: ${JWT_SECRET}
+
 springdoc:
   packages-to-scan: com.skhu.mypack
   default-consumes-media-type: application/json;charset=UTF-8
