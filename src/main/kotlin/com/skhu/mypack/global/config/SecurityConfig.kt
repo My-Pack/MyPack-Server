@@ -1,5 +1,8 @@
 package com.skhu.mypack.global.config
 
+import com.skhu.mypack.global.auth.filter.JwtAuthenticationFilter
+import com.skhu.mypack.global.auth.handler.CustomAccessDinedHandler
+import com.skhu.mypack.global.auth.handler.CustomAuthenticationEntryPoint
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -7,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.CorsUtils
@@ -14,39 +18,41 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 class SecurityConfig(
-    @Value("\${cors.allowed-origins}")
-    val corsOrigins: Array<String>
+        private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+        private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint,
+        private val customAccessDinedHandler: CustomAccessDinedHandler,
+        @Value("\${cors.allowed-origins}")
+        private val corsOrigins: Array<String>,
 ) {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
 
         return http
-            .cors {
-                it.configurationSource(configurationSource())
-            }
-            .csrf {
-                it.disable()
-            }
-            .formLogin {
-                it.disable()
-            }
-            .httpBasic {
-                it.disable()
-            }
-            .sessionManagement {
-                it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            }
-            .authorizeHttpRequests {
-                it.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-                    .anyRequest().permitAll()
-            }
-            // TODO: Add filter, authenticationEntryPoint, accessDeniedHandler
-//            .addFilterBefore()
-//            .exceptionHandling {
-//                it.authenticationEntryPoint()
-//                    .accessDeniedHandler()
-//            }
-            .build()
+                .cors {
+                    it.configurationSource(configurationSource())
+                }
+                .csrf {
+                    it.disable()
+                }
+                .formLogin {
+                    it.disable()
+                }
+                .httpBasic {
+                    it.disable()
+                }
+                .sessionManagement {
+                    it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                }
+                .authorizeHttpRequests {
+                    it.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                            .anyRequest().permitAll()
+                }
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+                .exceptionHandling {
+                    it.authenticationEntryPoint(customAuthenticationEntryPoint)
+                            .accessDeniedHandler(customAccessDinedHandler)
+                }
+                .build()
     }
 
     @Bean
