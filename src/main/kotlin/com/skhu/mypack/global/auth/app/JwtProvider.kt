@@ -53,8 +53,9 @@ class JwtProvider(
 
     fun getUsernameFromAccessToken(accessToken: String): String {
         return try {
-            Jwts.parser()
+            Jwts.parserBuilder()
                 .setSigningKey(secretKey)
+                .build()
                 .parseClaimsJws(accessToken)
                 .body
                 .subject
@@ -65,22 +66,25 @@ class JwtProvider(
 
     fun isValidToken(token: String): Boolean {
         return try {
-            Jwts.parser()
+            Jwts.parserBuilder()
                 .setSigningKey(secretKey)
-                .parseClaimsJwt(token)
+                .build()
+                .parseClaimsJws(token)
             true
         } catch (expiredTokenException: ExpiredJwtException) {
             true
         } catch (e: Exception) {
+            e.printStackTrace()
             false
         }
     }
 
     fun isExpiredToken(token: String): Boolean {
         return try {
-            Jwts.parser()
+            Jwts.parserBuilder()
                 .setSigningKey(secretKey)
-                .parseClaimsJwt(token)
+                .build()
+                .parseClaimsJws(token)
             false
         } catch (expiredTokenException: ExpiredJwtException) {
             true
