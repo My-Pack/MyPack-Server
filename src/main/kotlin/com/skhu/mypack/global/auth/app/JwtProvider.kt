@@ -51,6 +51,11 @@ class JwtProvider(
         return UsernamePasswordAuthenticationToken(principal, "", principal.authorities)
     }
 
+    fun isSignUp(accessToken: String): Boolean {
+        val principal = principalService.loadUserByUsername(getUsernameFromAccessToken(accessToken))
+        return principal.isEnabled
+    }
+
     fun getUsernameFromAccessToken(accessToken: String): String {
         return try {
             Jwts.parserBuilder()

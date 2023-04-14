@@ -1,5 +1,6 @@
 package com.skhu.mypack.global.auth.handler
 
+import com.skhu.mypack.global.auth.PrincipalDetails
 import com.skhu.mypack.global.auth.app.JwtProvider
 import com.skhu.mypack.global.util.HeaderUtil
 import jakarta.servlet.http.HttpServletRequest
@@ -24,14 +25,18 @@ class CustomAuthenticationEntryPoint(
         } else if (!jwtProvider.isValidToken(accessToken)) {
             code = "ACCESS_TOKEN_IS_INVALID"
             message = "액세스 토큰이 유효하지 않습니다."
-        } else if (!jwtProvider.isExpiredToken(accessToken)) {
+        } else if (jwtProvider.isExpiredToken(accessToken)) {
             status = 403
             code = "ACCESS_TOKEN_IS_EXPIRED"
             message = "액세스 토큰이 만료되었습니다."
+        } else if (!jwtProvider.isSignUp(accessToken)) {
+            status = 400
+            code = "NEED_SIGN_UP"
+            message = "회원가입이 필요합니다."
         }
 
         response.contentType = "application/json;charset=UTF-8"
-        response.status = 401
+        response.status = status
         response.writer.println(
                 """
                 {
