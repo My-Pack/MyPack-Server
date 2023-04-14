@@ -1,6 +1,7 @@
 package com.skhu.mypack.auth.app
 
 import com.skhu.mypack.auth.dao.RefreshTokenRepository
+import com.skhu.mypack.auth.dto.request.TokenRequest
 import com.skhu.mypack.auth.dto.response.TokenResponse
 import com.skhu.mypack.auth.exception.CantResolveAccessTokenException
 import com.skhu.mypack.global.auth.PrincipalDetails
@@ -27,7 +28,10 @@ class TokenService(
     }
 
     @Transactional(readOnly = true)
-    fun resolveAccessToken(accessToken: String, refreshToken: String): TokenResponse {
+    fun resolveAccessToken(tokenRequest: TokenRequest): TokenResponse {
+        val accessToken = tokenRequest.accessToken
+        val refreshToken = tokenRequest.refreshToken
+
         val validTokens = { access: String, refresh: String ->
             jwtProvider.isValidToken(access) && jwtProvider.isValidToken(refresh)
         }
