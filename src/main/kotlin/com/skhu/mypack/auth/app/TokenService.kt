@@ -28,9 +28,19 @@ class TokenService(
 
     @Transactional(readOnly = true)
     fun resolveAccessToken(accessToken: String, refreshToken: String): TokenResponse {
-        if (jwtProvider.isValidToken(accessToken) && jwtProvider.isValidToken(refreshToken)) {
-            if (jwtProvider.isExpiredToken(accessToken) && !jwtProvider.isExpiredToken(refreshToken)) {
-                val auth = jwtProvider.getAuthentication(accessToken)
+        val validTokens = { access: String, refresh: String ->
+            jwtProvider.isValidToken(access) && jwtProvider.isValidToken(refresh)
+        }
+
+        val canResolveAccessToken = { access: String, refresh: String ->
+            jwtProvider.isExpiredToken(access) && !jwtProvider.isExpiredToken(refresh)
+        }
+
+        if (validTokens(accessToken, refreshToken) && canResolveAccessToken(accessToken, refreshToken)) {
+            val auth = jwtProvider.getAuthentication(accessToken)
+            val email = auth.name
+
+            if (refreshTokenRepository.findEmailByToken(refreshToken) == email) {
                 val newAccessToken = jwtProvider.createAccessToken(auth)
 
                 return TokenResponse(newAccessToken, refreshToken)
