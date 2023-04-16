@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails
 class PrincipalDetails(
         val email: String,
         val role: Role,
-        val isSignUp: Boolean,
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return mutableListOf(SimpleGrantedAuthority(role.name))
@@ -37,7 +36,7 @@ class PrincipalDetails(
     }
 
     override fun isEnabled(): Boolean {
-        return isSignUp
+        return true
     }
 
     fun toAuthentication(): Authentication {

@@ -20,9 +20,8 @@ class JwtAuthenticationFilter(
         if (accessToken != null) {
             val isTokenValid = jwtProvider.isValidToken(accessToken)
             val isTokenExpired = jwtProvider.isExpiredToken(accessToken)
-            val isSignUp = jwtProvider.isSignUp(accessToken)
 
-            if (isTokenValid && !isTokenExpired && isSignUp) {
+            if (isTokenValid && !isTokenExpired) {
                 val authentication = jwtProvider.getAuthentication(accessToken)
                 SecurityContextHolder.getContext().authentication = authentication
             }

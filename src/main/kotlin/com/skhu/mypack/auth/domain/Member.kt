@@ -9,7 +9,6 @@ import jakarta.persistence.Enumerated
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
-import jakarta.persistence.OneToOne
 
 @Entity
 class Member(
@@ -21,8 +20,6 @@ class Member(
     var email: String,
     @Column(name = "name", unique = true, nullable = false)
     var name: String = "",
-    @Column(name = "is_signup", nullable = false)
-    var isSignUp: Boolean = false,
     @Enumerated
     @Column(name = "provider", nullable = false)
     var provider: Provider = Provider.NONE,
@@ -33,8 +30,7 @@ class Member(
     fun toPrincipal(): PrincipalDetails {
         return PrincipalDetails(
             email,
-            role,
-            isSignUp
+            role
         )
     }
 }

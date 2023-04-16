@@ -1,6 +1,5 @@
 package com.skhu.mypack.global.auth.app
 
-import com.skhu.mypack.auth.exception.MemberNotFoundException
 import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -49,11 +48,6 @@ class JwtProvider(
     fun getAuthentication(accessToken: String): Authentication {
         val principal = principalService.loadUserByUsername(getUsernameFromAccessToken(accessToken))
         return UsernamePasswordAuthenticationToken(principal, "", principal.authorities)
-    }
-
-    fun isSignUp(accessToken: String): Boolean {
-        val principal = principalService.loadUserByUsername(getUsernameFromAccessToken(accessToken))
-        return principal.isEnabled
     }
 
     fun getUsernameFromAccessToken(accessToken: String): String {

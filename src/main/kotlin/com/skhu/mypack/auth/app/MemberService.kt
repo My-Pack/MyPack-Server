@@ -6,9 +6,9 @@ import com.skhu.mypack.auth.domain.enum.Provider
 import com.skhu.mypack.auth.domain.enum.Role
 import com.skhu.mypack.auth.exception.MemberNotFoundException
 import com.skhu.mypack.global.auth.PrincipalDetails
-import com.skhu.mypack.global.auth.app.JwtProvider
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import java.util.UUID
 
 @Service
 class MemberService(
@@ -23,7 +23,7 @@ class MemberService(
         } catch (e: MemberNotFoundException) {
             val newMember = Member(
                 email = email,
-                isSignUp = false,
+                name = UUID.randomUUID().toString(),
                 role = role,
                 provider = provider
             )

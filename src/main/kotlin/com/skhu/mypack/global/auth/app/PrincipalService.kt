@@ -13,6 +13,6 @@ class PrincipalService(private val memberRepository: MemberRepository) : UserDet
     @Transactional(readOnly = true)
     override fun loadUserByUsername(username: String): UserDetails {
         val member = memberRepository.findByEmail(username) ?: throw MemberNotFoundException(username)
-        return PrincipalDetails(member.email, member.role, member.isSignUp)
+        return PrincipalDetails(member.email, member.role)
     }
 }
