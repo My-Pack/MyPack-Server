@@ -1,8 +1,8 @@
 package com.skhu.mypack.global.auth.app
 
-import com.skhu.mypack.auth.dao.MemberRepository
-import com.skhu.mypack.auth.exception.MemberNotFoundException
 import com.skhu.mypack.global.auth.PrincipalDetails
+import com.skhu.mypack.member.dao.MemberRepository
+import com.skhu.mypack.member.exception.MemberNotFoundException
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Service

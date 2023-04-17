@@ -45,6 +45,8 @@ class SecurityConfig(
                 }
                 .authorizeHttpRequests {
                     it.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                        .requestMatchers("api/v1/auth/ping-user").hasRole("USER")
+                        .requestMatchers("api/v1/auth/ping-user").hasRole("USER")
                             .anyRequest().permitAll()
                 }
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)

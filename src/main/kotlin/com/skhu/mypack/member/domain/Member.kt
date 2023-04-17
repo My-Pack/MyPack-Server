@@ -1,9 +1,9 @@
-package com.skhu.mypack.auth.domain
+package com.skhu.mypack.member.domain
 
-import com.skhu.mypack.auth.domain.enum.Provider
-import com.skhu.mypack.auth.domain.enum.Role
-import com.skhu.mypack.auth.dto.request.MemberUpdateRequest
 import com.skhu.mypack.global.auth.PrincipalDetails
+import com.skhu.mypack.member.domain.enum.Provider
+import com.skhu.mypack.member.domain.enum.Role
+import com.skhu.mypack.member.dto.request.MemberUpdateRequest
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Enumerated

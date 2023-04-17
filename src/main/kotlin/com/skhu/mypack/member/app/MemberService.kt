@@ -1,14 +1,14 @@
-package com.skhu.mypack.auth.app
+package com.skhu.mypack.member.app
 
-import com.skhu.mypack.auth.dao.MemberRepository
-import com.skhu.mypack.auth.domain.Member
-import com.skhu.mypack.auth.domain.enum.Provider
-import com.skhu.mypack.auth.domain.enum.Role
-import com.skhu.mypack.auth.dto.request.MemberUpdateRequest
-import com.skhu.mypack.auth.dto.response.MemberResponse
-import com.skhu.mypack.auth.exception.MemberNotFoundException
-import com.skhu.mypack.auth.exception.NoMemberUpdatePermissionException
 import com.skhu.mypack.global.auth.PrincipalDetails
+import com.skhu.mypack.member.dao.MemberRepository
+import com.skhu.mypack.member.domain.Member
+import com.skhu.mypack.member.domain.enum.Provider
+import com.skhu.mypack.member.domain.enum.Role
+import com.skhu.mypack.member.dto.request.MemberUpdateRequest
+import com.skhu.mypack.member.dto.response.MemberResponse
+import com.skhu.mypack.member.exception.MemberNotFoundException
+import com.skhu.mypack.member.exception.NoMemberUpdatePermissionException
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -40,7 +40,7 @@ class MemberService(
 
     @Transactional(readOnly = true)
     fun isExistsByName(name: String): Boolean {
-        return memberRepository.isExistsByName(name)
+        return memberRepository.existsByName(name)
     }
 
     @Transactional(readOnly = true)

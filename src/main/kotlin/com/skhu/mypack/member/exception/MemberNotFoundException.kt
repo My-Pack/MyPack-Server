@@ -1,4 +1,4 @@
-package com.skhu.mypack.auth.exception
+package com.skhu.mypack.member.exception
 
 import com.skhu.mypack.global.error.CustomAbstractException
 import org.springframework.http.HttpStatus

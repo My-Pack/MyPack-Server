@@ -6,7 +6,6 @@ import com.skhu.mypack.auth.dto.response.TokenResponse
 import com.skhu.mypack.auth.exception.CantResolveAccessTokenException
 import com.skhu.mypack.global.auth.PrincipalDetails
 import com.skhu.mypack.global.auth.app.JwtProvider
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 

@@ -1,4 +1,4 @@
-package com.skhu.mypack.auth.dto.request
+package com.skhu.mypack.member.dto.request
 
 import jakarta.validation.constraints.NotBlank
 

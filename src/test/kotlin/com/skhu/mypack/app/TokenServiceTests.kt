@@ -2,11 +2,11 @@ package com.skhu.mypack.app
 
 import com.skhu.mypack.auth.app.TokenService
 import com.skhu.mypack.auth.dao.RefreshTokenRepository
-import com.skhu.mypack.auth.domain.enum.Role
 import com.skhu.mypack.auth.dto.request.TokenRequest
 import com.skhu.mypack.auth.exception.CantResolveAccessTokenException
 import com.skhu.mypack.global.auth.PrincipalDetails
 import com.skhu.mypack.global.auth.app.JwtProvider
+import com.skhu.mypack.member.domain.enum.Role
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs

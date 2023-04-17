@@ -1,6 +1,6 @@
-package com.skhu.mypack.auth.dto.response
+package com.skhu.mypack.member.dto.response
 
-import com.skhu.mypack.auth.domain.Member
+import com.skhu.mypack.member.domain.Member
 
 data class MemberResponse(
     val id: Long,

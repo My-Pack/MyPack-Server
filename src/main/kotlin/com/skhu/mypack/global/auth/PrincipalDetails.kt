@@ -1,6 +1,6 @@
 package com.skhu.mypack.global.auth
 
-import com.skhu.mypack.auth.domain.enum.Role
+import com.skhu.mypack.member.domain.enum.Role
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
@@ -8,8 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
 
 class PrincipalDetails(
-        val email: String,
-        val role: Role,
+    val email: String,
+    val role: Role,
 ) : UserDetails {
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         return mutableListOf(SimpleGrantedAuthority(role.name))

@@ -1,4 +1,4 @@
-package com.skhu.mypack.auth.domain.enum
+package com.skhu.mypack.member.domain.enum
 
 enum class Role {
     ROLE_USER,

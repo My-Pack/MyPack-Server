@@ -1,18 +1,12 @@
 package com.skhu.mypack.auth.app
 
-import com.skhu.mypack.auth.dao.MemberRepository
-import com.skhu.mypack.auth.domain.Member
-import com.skhu.mypack.auth.domain.enum.Provider
-import com.skhu.mypack.auth.domain.enum.Role
 import com.skhu.mypack.auth.dto.request.GoogleCredentialRequest
 import com.skhu.mypack.auth.dto.response.GoogleIdTokenPayloadResponse
 import com.skhu.mypack.auth.exception.GoogleOAuth2ServerException
 import com.skhu.mypack.auth.exception.InvalidGoogleClientIdException
-import com.skhu.mypack.auth.exception.MemberNotFoundException
 import com.skhu.mypack.auth.exception.NoInfoGoogleIdTokenPayloadException
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 
