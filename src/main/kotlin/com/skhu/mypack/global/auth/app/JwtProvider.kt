@@ -31,7 +31,7 @@ class JwtProvider(
             .setSubject(authentication.name)
             .claim("roles", authentication.authorities)
             .setExpiration(Date(now.time + ACCESS_TOKEN_EXPIRED_TIME))
-            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .signWith(secretKey, SignatureAlgorithm.HS512)
             .compact()
     }
 
@@ -41,7 +41,7 @@ class JwtProvider(
         return Jwts.builder()
             .setSubject(UUID.randomUUID().toString())
             .setExpiration(Date(now.time + REFRESH_TOKEN_EXPIRED_TIME))
-            .signWith(SignatureAlgorithm.HS256, secretKey)
+            .signWith(secretKey, SignatureAlgorithm.HS512)
             .compact()
     }
 
