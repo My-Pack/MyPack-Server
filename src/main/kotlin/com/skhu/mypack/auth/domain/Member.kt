@@ -2,6 +2,7 @@ package com.skhu.mypack.auth.domain
 
 import com.skhu.mypack.auth.domain.enum.Provider
 import com.skhu.mypack.auth.domain.enum.Role
+import com.skhu.mypack.auth.dto.request.MemberUpdateRequest
 import com.skhu.mypack.global.auth.PrincipalDetails
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -32,5 +33,9 @@ class Member(
             email,
             role
         )
+    }
+
+    fun update(memberUpdateRequest: MemberUpdateRequest) {
+        this.name = memberUpdateRequest.newName
     }
 }

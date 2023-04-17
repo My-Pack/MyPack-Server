@@ -4,4 +4,4 @@ import com.skhu.mypack.global.error.CustomAbstractException
 import org.springframework.http.HttpStatus
 
 class MemberNotFoundException(email: String) :
-        CustomAbstractException(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "해당 이메일(${email})로 멤버를 찾을 수 없음")
+        CustomAbstractException(HttpStatus.NOT_FOUND, "MEMBER_NOT_FOUND", "해당 요소(${email})로 멤버를 찾을 수 없음")
