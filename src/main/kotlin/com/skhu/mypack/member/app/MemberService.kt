@@ -9,6 +9,7 @@ import com.skhu.mypack.member.dto.request.MemberUpdateRequest
 import com.skhu.mypack.member.dto.response.MemberResponse
 import com.skhu.mypack.member.exception.MemberNotFoundException
 import com.skhu.mypack.member.exception.NoMemberUpdatePermissionException
+import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -50,8 +51,8 @@ class MemberService(
     }
 
     @Transactional(readOnly = true)
-    fun findAllByName(name: String): Slice<MemberResponse> {
-        val memberSlice = memberRepository.findAllByNameLike("%$name%")
+    fun findAllByName(name: String, pageable: Pageable): Slice<MemberResponse> {
+        val memberSlice = memberRepository.findAllByNameLike("%$name%", pageable)
         return memberSlice.map { MemberResponse.of(it) }
     }
 
