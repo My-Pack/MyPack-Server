@@ -4,12 +4,16 @@ import com.skhu.mypack.global.auth.PrincipalDetails
 import com.skhu.mypack.member.domain.enum.Provider
 import com.skhu.mypack.member.domain.enum.Role
 import com.skhu.mypack.member.dto.request.MemberUpdateRequest
+import com.skhu.mypack.storage.domain.ImageFile
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Enumerated
+import jakarta.persistence.FetchType
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.OneToOne
 
 @Entity
 class Member(
@@ -27,6 +31,12 @@ class Member(
     @Enumerated
     @Column(name = "role", nullable = false)
     var role: Role = Role.ROLE_USER,
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_image_id")
+    var profileImage: ImageFile? = null,
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "background_image_id")
+    var backgroundImage: ImageFile? = null,
 ) {
     fun toPrincipal(): PrincipalDetails {
         return PrincipalDetails(
