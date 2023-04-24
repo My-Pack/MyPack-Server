@@ -19,5 +19,11 @@ class ImageFile(
     var storedName: String,
     @Column(name = "s3_url", nullable = false)
     var s3Url: String,
+    @Column(name = "is_use", nullable = false)
+    var isUse: Boolean = false,
 ) : BaseTimeEntity() {
+
+    fun updateUse(isUse: Boolean) {
+        this.isUse = isUse
+    }
 }
