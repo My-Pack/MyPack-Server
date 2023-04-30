@@ -3,7 +3,6 @@ package com.skhu.mypack.member.domain
 import com.skhu.mypack.global.auth.PrincipalDetails
 import com.skhu.mypack.member.domain.enum.Provider
 import com.skhu.mypack.member.domain.enum.Role
-import com.skhu.mypack.member.dto.request.MemberUpdateRequest
 import com.skhu.mypack.storage.domain.ImageFile
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -45,7 +44,13 @@ class Member(
         )
     }
 
-    fun update(memberUpdateRequest: MemberUpdateRequest) {
-        this.name = memberUpdateRequest.newName
+    fun update(name: String, profileImage: ImageFile?, backgroundImage: ImageFile?) {
+        this.name = name
+        this.profileImage?.updateUse(false)
+        this.backgroundImage?.updateUse(false)
+        profileImage?.updateUse(true)
+        backgroundImage?.updateUse(true)
+        this.profileImage = profileImage
+        this.backgroundImage = backgroundImage
     }
 }

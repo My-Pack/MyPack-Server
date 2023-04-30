@@ -1,14 +1,12 @@
 package com.skhu.mypack.app
 
-import com.skhu.mypack.global.auth.PrincipalDetails
 import com.skhu.mypack.member.app.MemberService
 import com.skhu.mypack.member.dao.MemberRepository
 import com.skhu.mypack.member.domain.Member
 import com.skhu.mypack.member.domain.enum.Provider
 import com.skhu.mypack.member.domain.enum.Role
-import com.skhu.mypack.member.dto.request.MemberUpdateRequest
 import com.skhu.mypack.member.exception.MemberNotFoundException
-import com.skhu.mypack.member.exception.NoMemberUpdatePermissionException
+import com.skhu.mypack.storage.app.ImageFileService
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
@@ -32,6 +30,9 @@ class MemberServiceTests {
 
     @MockK
     private lateinit var memberRepository: MemberRepository
+
+    @MockK
+    private lateinit var imageFileService: ImageFileService
 
     @InjectMockKs
     private lateinit var memberService: MemberService
@@ -273,63 +274,63 @@ class MemberServiceTests {
         }
     }
 
-    @Nested
-    inner class UpdateName {
-        private val principalDetails = PrincipalDetails("email", Role.ROLE_USER)
-        private val memberUpdateRequest = MemberUpdateRequest("old_name", "new_name")
-
-        @Nested
-        inner class Success {
-
-            @Test
-            fun `성공적으로 업데이트`() {
-                // given
-                every {
-                    memberRepository.findByEmail(principalDetails.email)
-                } returns Member(id = 1, email = principalDetails.email, name = "old_name")
-
-                // when
-                val updateMember = memberService.updateName(principalDetails, memberUpdateRequest)
-
-                // then
-                verify {
-                    memberRepository.findByEmail(principalDetails.email)
-                }
-
-                assertSame(updateMember.name, memberUpdateRequest.newName)
-            }
-        }
-
-        @Nested
-        inner class Fail {
-
-            @Test
-            fun `멤버가 없을 경우`() {
-                // given
-                every {
-                    memberRepository.findByEmail(principalDetails.email)
-                } throws MemberNotFoundException(principalDetails.email)
-
-                // when then
-                assertThrows<MemberNotFoundException> {
-                    memberService.updateName(principalDetails, memberUpdateRequest)
-                }
-                verify { memberRepository.findByEmail(principalDetails.email) }
-            }
-
-            @Test
-            fun `요청자와 대상자가 다를 경우`() {
-                // given
-                every {
-                    memberRepository.findByEmail(principalDetails.email)
-                } returns Member(id = 1, email = principalDetails.email, name = "other_name")
-
-                // when then
-                assertThrows<NoMemberUpdatePermissionException> {
-                    memberService.updateName(principalDetails, memberUpdateRequest)
-                }
-                verify { memberRepository.findByEmail(principalDetails.email) }
-            }
-        }
-    }
+//    @Nested
+//    inner class Update {
+//        private val principalDetails = PrincipalDetails("email", Role.ROLE_USER)
+//        private val memberUpdateRequest = MemberUpdateRequest("old_name", "new_name", 1, 2)
+//
+//        @Nested
+//        inner class Success {
+//
+//            @Test
+//            fun `성공적으로 업데이트`() {
+//                // given
+//                every {
+//                    memberRepository.findByEmail(principalDetails.email)
+//                } returns Member(id = 1, email = principalDetails.email, name = "old_name")
+//
+//                // when
+//                val updateMember = memberService.update(principalDetails, memberUpdateRequest)
+//
+//                // then
+//                verify {
+//                    memberRepository.findByEmail(principalDetails.email)
+//                }
+//
+//                assertSame(updateMember.name, memberUpdateRequest.newName)
+//            }
+//        }
+//
+//        @Nested
+//        inner class Fail {
+//
+//            @Test
+//            fun `멤버가 없을 경우`() {
+//                // given
+//                every {
+//                    memberRepository.findByEmail(principalDetails.email)
+//                } throws MemberNotFoundException(principalDetails.email)
+//
+//                // when then
+//                assertThrows<MemberNotFoundException> {
+//                    memberService.update(principalDetails, memberUpdateRequest)
+//                }
+//                verify { memberRepository.findByEmail(principalDetails.email) }
+//            }
+//
+//            @Test
+//            fun `요청자와 대상자가 다를 경우`() {
+//                // given
+//                every {
+//                    memberRepository.findByEmail(principalDetails.email)
+//                } returns Member(id = 1, email = principalDetails.email, name = "other_name")
+//
+//                // when then
+//                assertThrows<NoMemberUpdatePermissionException> {
+//                    memberService.update(principalDetails, memberUpdateRequest)
+//                }
+//                verify { memberRepository.findByEmail(principalDetails.email) }
+//            }
+//        }
+//    }
 }

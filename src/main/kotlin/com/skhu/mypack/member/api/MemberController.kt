@@ -63,7 +63,7 @@ class MemberController(
 
     @Operation(
         summary = "회원 수정",
-        description = "회원을 수정합니다. 현재 로그인된(JWT 토큰)과 request의 oldName이 같아야 작동합니다. 아직 더 추가 예정이니 api 붙이지 마세용.",
+        description = "회원을 수정합니다. 현재 로그인된(JWT 토큰)과 request의 oldName이 같아야 작동합니다.",
         responses = [
             ApiResponse(responseCode = "200", description = "회원 수정 성공"),
             ApiResponse(responseCode = "403", description = "수정 권한 없음", content = [Content()]),
@@ -71,10 +71,10 @@ class MemberController(
         ],
     )
     @PatchMapping
-    fun updateByName(
+    fun update(
         @RequestBody memberUpdateRequest: MemberUpdateRequest,
         @AuthenticationPrincipal principal: PrincipalDetails
     ): ResponseEntity<MemberResponse> {
-        return ResponseEntity.ok(memberService.updateName(principal, memberUpdateRequest))
+        return ResponseEntity.ok(memberService.update(principal, memberUpdateRequest))
     }
 }

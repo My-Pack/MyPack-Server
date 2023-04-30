@@ -7,8 +7,10 @@ import com.skhu.mypack.member.domain.enum.Provider
 import com.skhu.mypack.member.domain.enum.Role
 import com.skhu.mypack.member.dto.request.MemberUpdateRequest
 import com.skhu.mypack.member.dto.response.MemberResponse
+import com.skhu.mypack.member.exception.ExistsByNameException
 import com.skhu.mypack.member.exception.MemberNotFoundException
 import com.skhu.mypack.member.exception.NoMemberUpdatePermissionException
+import com.skhu.mypack.storage.app.ImageFileService
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
@@ -18,6 +20,7 @@ import java.util.UUID
 @Service
 class MemberService(
     private val memberRepository: MemberRepository,
+    private val imageFileService: ImageFileService,
 ) {
 
     @Transactional
@@ -63,14 +66,25 @@ class MemberService(
     }
 
     @Transactional
-    fun updateName(principalDetails: PrincipalDetails, memberUpdateRequest: MemberUpdateRequest): MemberResponse {
+    fun update(principalDetails: PrincipalDetails, memberUpdateRequest: MemberUpdateRequest): MemberResponse {
         val email = principalDetails.email
         val member = memberRepository.findByEmail(email) ?: throw MemberNotFoundException(email)
         if (member.name != memberUpdateRequest.oldName) {
             throw NoMemberUpdatePermissionException()
         }
 
-        member.update(memberUpdateRequest)
+        if (isExistsByName(memberUpdateRequest.newName)) {
+            throw ExistsByNameException(memberUpdateRequest.newName)
+        }
+
+        val profileImage = memberUpdateRequest.profileImageId?.let {
+            imageFileService.findEntityById(it)
+        }
+        val backgroundImage = memberUpdateRequest.backgroundImageId?.let {
+            imageFileService.findEntityById(it)
+        }
+
+        member.update(memberUpdateRequest.newName, profileImage, backgroundImage)
 
         return MemberResponse.of(member)
     }
