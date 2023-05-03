@@ -11,6 +11,6 @@ class ImageFileScheduler(
 
     @Scheduled(cron = "0 0 0 * * *")
     fun deleteAllByNotUse() {
-        imageFileService.deleteAllByUseIsFalse()
+        imageFileService.deleteAllByUseIsFalseAndBeforeOneDayAgo()
     }
 }

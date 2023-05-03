@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory
 import com.skhu.mypack.storage.domain.ImageFile
 import com.skhu.mypack.storage.domain.QImageFile
 import org.springframework.stereotype.Repository
+import java.time.LocalDateTime
 
 @Repository
 class ImageFileRepositorySupport(
@@ -11,9 +12,14 @@ class ImageFileRepositorySupport(
 ) {
     private val qImageFile = QImageFile.imageFile
 
-    fun findAllUseIsFalse(): List<ImageFile> {
+    fun findAllByUseIsFalseAndBeforeOneDayAgo(): List<ImageFile> {
+        val oneDayAgo = LocalDateTime.now().minusDays(1)
+
         return jpaQueryFactory.selectFrom(qImageFile)
-                .where(qImageFile.isUse.eq(false))
-                .fetch()
+            .where(
+                qImageFile.isUse.eq(false),
+                qImageFile.createdAt.before(oneDayAgo),
+            )
+            .fetch()
     }
 }

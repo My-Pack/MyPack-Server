@@ -9,7 +9,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
-import java.util.*
+import java.util.UUID
 
 @Service
 class ImageFileService(
@@ -40,8 +40,8 @@ class ImageFileService(
     }
 
     @Transactional
-    fun deleteAllByUseIsFalse() {
-        val imageFiles = imageFileRepositorySupport.findAllUseIsFalse()
+    fun deleteAllByUseIsFalseAndBeforeOneDayAgo() {
+        val imageFiles = imageFileRepositorySupport.findAllByUseIsFalseAndBeforeOneDayAgo()
         if (imageFiles.isEmpty()) return
         s3StorageService.removeAllFile(*imageFiles.map { imageFile -> imageFile.storedName }.toTypedArray())
         imageFileRepository.deleteAllInBatch(imageFiles)
