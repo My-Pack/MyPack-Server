@@ -1,6 +1,7 @@
 package com.skhu.mypack.storage.app
 
 import com.skhu.mypack.storage.dao.ImageFileRepository
+import com.skhu.mypack.storage.dao.ImageFileRepositorySupport
 import com.skhu.mypack.storage.domain.ImageFile
 import com.skhu.mypack.storage.dto.response.ImageFileResponse
 import com.skhu.mypack.storage.exception.NotImageFileFoundException
@@ -8,12 +9,13 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
-import java.util.UUID
+import java.util.*
 
 @Service
 class ImageFileService(
-    private val imageFileRepository: ImageFileRepository,
-    private val s3StorageService: S3StorageService,
+        private val imageFileRepository: ImageFileRepository,
+        private val imageFileRepositorySupport: ImageFileRepositorySupport,
+        private val s3StorageService: S3StorageService,
 ) {
 
     @Transactional
@@ -38,10 +40,11 @@ class ImageFileService(
     }
 
     @Transactional
-    fun deleteById(id: Long) {
-        val imageFile = findEntityById(id)
-        s3StorageService.removeFile(imageFile.storedName)
-        imageFileRepository.deleteById(id)
+    fun deleteAllByUseIsFalse() {
+        val imageFiles = imageFileRepositorySupport.findAllUseIsFalse()
+        if (imageFiles.isEmpty()) return
+        s3StorageService.removeAllFile(*imageFiles.map { imageFile -> imageFile.storedName }.toTypedArray())
+        imageFileRepository.deleteAllInBatch(imageFiles)
     }
 
     @Transactional(readOnly = true)

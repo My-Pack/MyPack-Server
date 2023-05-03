@@ -2,7 +2,7 @@ package com.skhu.mypack.storage.app
 
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.CannedAccessControlList
-import com.amazonaws.services.s3.model.DeleteObjectRequest
+import com.amazonaws.services.s3.model.DeleteObjectsRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import com.amazonaws.services.s3.model.PutObjectRequest
 import com.skhu.mypack.storage.exception.CouldNotUploadS3Exception
@@ -26,8 +26,8 @@ class S3StorageService(
         try {
             val inputStream = multipartFile.inputStream
             s3Client.putObject(
-                PutObjectRequest(bucket, "mypack/$convertedFileName", inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead)
+                    PutObjectRequest(bucket, "mypack/$convertedFileName", inputStream, objectMetadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)
             )
         } catch (e: IOException) {
             throw CouldNotUploadS3Exception()
@@ -36,7 +36,8 @@ class S3StorageService(
         return s3Client.getUrl(bucket, "mypack/$convertedFileName").toString()
     }
 
-    fun removeFile(fileName: String) {
-        s3Client.deleteObject(DeleteObjectRequest(bucket, "mypack/$fileName"))
+    fun removeAllFile(vararg fileNames: String) {
+        val deleteRequest = DeleteObjectsRequest(bucket).withKeys(*fileNames)
+        s3Client.deleteObjects(deleteRequest)
     }
 }
