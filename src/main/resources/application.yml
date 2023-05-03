@@ -10,6 +10,18 @@ spring:
       host: ${REDIS_HOST}
       port: ${REDIS_PORT}
 
+cloud:
+  aws:
+    credentials:
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+    s3:
+      bucket: hyunsoo-bucket
+    region:
+      static: ap-northeast-2
+    stack:
+      auto: false
+
 springdoc:
   packages-to-scan: com.skhu.mypack
   default-consumes-media-type: application/json;charset=UTF-8

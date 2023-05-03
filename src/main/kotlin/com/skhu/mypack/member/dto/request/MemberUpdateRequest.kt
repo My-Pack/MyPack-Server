@@ -11,4 +11,8 @@ data class MemberUpdateRequest(
     @Schema(description = "새로운 이름", example = "롱길동")
     @NotBlank
     val newName: String,
+    @Schema(description = "프로필 이미지 id", example = "1")
+    val profileImageId: Long?,
+    @Schema(description = "배경 이미지 id", example = "2")
+    val backgroundImageId: Long?,
 )
