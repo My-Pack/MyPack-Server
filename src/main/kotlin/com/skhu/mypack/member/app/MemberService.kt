@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import java.util.UUID
+import java.util.*
 
 @Service
 class MemberService(
@@ -87,5 +87,10 @@ class MemberService(
         member.update(memberUpdateRequest.newName, profileImage, backgroundImage)
 
         return MemberResponse.of(member)
+    }
+
+    @Transactional(readOnly = true)
+    fun findEntityByEmail(email: String): Member {
+        return memberRepository.findByEmail(email) ?: throw MemberNotFoundException(email)
     }
 }
