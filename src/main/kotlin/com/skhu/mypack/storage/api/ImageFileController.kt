@@ -22,16 +22,17 @@ class ImageFileController(
     @Operation(
             summary = "이미지 업로드",
             description = "이미지를 업로드합니다. content type이 image로 시작해야 업로드가 가능합니다.",
-            parameters = [
-                Parameter(name = "file", description = "이미지 파일"),
-            ],
             responses = [
                 ApiResponse(responseCode = "201", description = "이미지 업로드 성공"),
                 ApiResponse(responseCode = "400", description = "이미지 파일이 아님", content = [Content()]),
             ],
     )
     @PostMapping(consumes = [MediaType.MULTIPART_FORM_DATA_VALUE])
-    fun save(@RequestParam("file") file: MultipartFile): ResponseEntity<ImageFileResponse> {
+    fun save(
+            @Parameter(description = "이미지 파일")
+            @RequestParam("file")
+            file: MultipartFile
+    ): ResponseEntity<ImageFileResponse> {
         validateImageFile(file)
 
         val responseBody = imageFileService.save(file);

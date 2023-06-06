@@ -8,6 +8,10 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import jakarta.validation.Valid
+import org.springdoc.core.converters.models.PageableAsQueryParam
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.web.bind.annotation.*
@@ -28,6 +32,7 @@ class CardController(
     )
     @PostMapping
     fun save(
+            @Valid
             @RequestBody
             cardRequest: CardRequest,
             @AuthenticationPrincipal
@@ -39,6 +44,46 @@ class CardController(
                 .buildAndExpand(cardResponse.id)
                 .toUri()
         return ResponseEntity.created(uri).body(cardResponse)
+    }
+
+    @Operation(
+            summary = "카드들 정보 조회",
+            description = "카드들 정보를 조회합니다.",
+            parameters = [
+                Parameter(name = "title", description = "카드 제목(포함으로 검색)"),
+                Parameter(name = "content", description = "카드 내용(포함으로 검색)"),
+                Parameter(name = "color", description = "카드 색상(정확하게 검색)"),
+                Parameter(name = "theme", description = "카드 테마(정확하게 검색)"),
+                Parameter(name = "memberName", description = "카드 멤버 이름(정확하게 검색)"),
+            ],
+            responses = [
+                ApiResponse(responseCode = "200", description = "카드들 조회 성공"),
+                ApiResponse(responseCode = "204", description = "정보 없음", content = [Content()]),
+            ],
+    )
+    @PageableAsQueryParam
+    @GetMapping
+    fun findAll(
+            @RequestParam(required = false)
+            title: String?,
+            @RequestParam(required = false)
+            content: String?,
+            @RequestParam(required = false)
+            color: String?,
+            @RequestParam(required = false)
+            theme: String?,
+            @RequestParam(required = false)
+            memberName: String?,
+            @Parameter(hidden = true)
+            pageable: Pageable,
+    ): ResponseEntity<Slice<CardResponse>> {
+        val cardResponses = cardService.findAll(title, content, color, theme, memberName, pageable)
+
+        if (cardResponses.isEmpty) {
+            return ResponseEntity.noContent().build()
+        }
+
+        return ResponseEntity.ok(cardResponses)
     }
 
     @Operation(
@@ -74,6 +119,7 @@ class CardController(
     @PatchMapping("/{id}")
     fun updateById(
             @PathVariable id: Long,
+            @Valid
             @RequestBody
             cardRequest: CardRequest,
             @AuthenticationPrincipal
