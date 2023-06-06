@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.Parameter
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
+import jakarta.validation.Valid
 import org.springdoc.core.converters.models.PageableAsQueryParam
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Slice
@@ -31,6 +32,7 @@ class CardController(
     )
     @PostMapping
     fun save(
+            @Valid
             @RequestBody
             cardRequest: CardRequest,
             @AuthenticationPrincipal
@@ -117,6 +119,7 @@ class CardController(
     @PatchMapping("/{id}")
     fun updateById(
             @PathVariable id: Long,
+            @Valid
             @RequestBody
             cardRequest: CardRequest,
             @AuthenticationPrincipal
