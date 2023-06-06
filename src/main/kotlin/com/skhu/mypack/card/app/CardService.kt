@@ -1,6 +1,7 @@
 package com.skhu.mypack.card.app
 
 import com.skhu.mypack.card.dao.CardRepository
+import com.skhu.mypack.card.dao.CardRepositorySupport
 import com.skhu.mypack.card.domain.Card
 import com.skhu.mypack.card.dto.request.CardRequest
 import com.skhu.mypack.card.dto.response.CardResponse
@@ -9,11 +10,14 @@ import com.skhu.mypack.card.exception.NoCardPermissionException
 import com.skhu.mypack.global.auth.PrincipalDetails
 import com.skhu.mypack.member.app.MemberService
 import com.skhu.mypack.storage.app.ImageFileService
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Slice
 import org.springframework.stereotype.Service
 
 @Service
 class CardService(
         private val cardRepository: CardRepository,
+        private val cardRepositorySupport: CardRepositorySupport,
         private val imageFileService: ImageFileService,
         private val memberService: MemberService,
 ) {
@@ -35,6 +39,18 @@ class CardService(
     fun findById(id: Long): CardResponse {
         val card = findEntityById(id)
         return CardResponse.of(card)
+    }
+
+    fun findAll(
+            title: String?,
+            content: String?,
+            color: String?,
+            theme: String?,
+            memberName: String?,
+            pageable: Pageable,
+    ): Slice<CardResponse> {
+        val cards = cardRepositorySupport.findAll(title, content, color, theme, memberName, pageable)
+        return cards.map { CardResponse.of(it) }
     }
 
     fun updateById(id: Long, cardRequest: CardRequest, principalDetails: PrincipalDetails): CardResponse {
